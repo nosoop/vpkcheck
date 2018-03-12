@@ -24,7 +24,7 @@ def main(args):
             addon_info = json.load(f)
     
     with vpk.open(args.base_package) as pak01:
-        original_pak = set(pak01)
+        original_pak = set(filter(lambda f: args.name_match in f, pak01))
     
     if not len(original_pak):
         raise AssertionError("base package is empty")
@@ -81,6 +81,8 @@ if __name__ == '__main__':
             help="path to addon list file (from workshop downloader); optional")
     parser.add_argument('-p', '--base-package', metavar='VPK',
             help="a Steam Workshop map collection to retrieve maps from")
+    parser.add_argument('-n', '--name-match', metavar='STRING', default = '',
+            help='Only check file paths containing the specified string')
     parser.add_argument('PACKAGE', nargs='*', help="one or more packages to check")
     
     args = parser.parse_args()
